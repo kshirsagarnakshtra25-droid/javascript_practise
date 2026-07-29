@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Registration Form</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#4facfe,#00f2fe);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+}
+
+.container{
+    background:#fff;
+    width:450px;
+    padding:25px;
+    border-radius:12px;
+    box-shadow:0 10px 20px rgba(0,0,0,.2);
+}
+
+h2{
+    text-align:center;
+    margin-bottom:20px;
+    color:#333;
+}
+
+.input-group{
+    margin-bottom:15px;
+}
+
+label{
+    font-weight:bold;
+}
+
+input,textarea{
+    width:100%;
+    padding:10px;
+    margin-top:5px;
+    border:1px solid #aaa;
+    border-radius:6px;
+    outline:none;
+}
+
+textarea{
+    resize:none;
+}
+
+.hobbies{
+    margin-top:8px;
+}
+
+button{
+    width:48%;
+    padding:10px;
+    border:none;
+    color:white;
+    font-size:16px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.submit{
+    background:#28a745;
+}
+
+.reset{
+    background:#dc3545;
+}
+
+.buttons{
+    display:flex;
+    justify-content:space-between;
+    margin-top:15px;
+}
+
+.error{
+    color:red;
+    font-size:13px;
+}
+
+.result{
+    margin-top:20px;
+    background:#f1f1f1;
+    padding:15px;
+    border-radius:8px;
+    display:none;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h2>Student Registration Form</h2>
+
+<form id="studentForm">
+
+<div class="input-group">
+<label>Name</label>
+<input type="text" id="name">
+<div class="error" id="nameError"></div>
+</div>
+
+<div class="input-group">
+<label>Roll Number</label>
+<input type="number" id="roll">
+<div class="error" id="rollError"></div>
+</div>
+
+<div class="input-group">
+<label>Phone Number</label>
+<input type="text" id="phone">
+<div class="error" id="phoneError"></div>
+</div>
+
+<div class="input-group">
+<label>Address</label>
+<textarea id="address" rows="3"></textarea>
+<div class="error" id="addressError"></div>
+</div>
+
+<div class="input-group">
+<label>PIN Code</label>
+<input type="text" id="pin">
+<div class="error" id="pinError"></div>
+</div>
+
+<div class="input-group">
+<label>Hobbies</label>
+
+<div class="hobbies">
+<input type="checkbox" value="Reading"> Reading
+<input type="checkbox" value="Coding"> Coding
+<input type="checkbox" value="Sports"> Sports
+<input type="checkbox" value="Music"> Music
+</div>
+
+<div class="error" id="hobbyError"></div>
+
+</div>
+
+<div class="buttons">
+<button type="submit" class="submit">Submit</button>
+<button type="reset" class="reset">Reset</button>
+</div>
+
+</form>
+
+<div class="result" id="result"></div>
+
+</div>
+
+<script>
+
+document.getElementById("studentForm").addEventListener("submit",function(event){
+
+event.preventDefault();
+
+document.querySelectorAll(".error").forEach(e=>e.innerHTML="");
+
+let name=document.getElementById("name").value.trim();
+let roll=document.getElementById("roll").value.trim();
+let phone=document.getElementById("phone").value.trim();
+let address=document.getElementById("address").value.trim();
+let pin=document.getElementById("pin").value.trim();
+
+let hobbies=[];
+
+document.querySelectorAll("input[type='checkbox']:checked").forEach(function(item){
+hobbies.push(item.value);
+});
+
+let valid=true;
+
+if(name==""){
+document.getElementById("nameError").innerHTML="Name is required";
+valid=false;
+}
+else if(!/^[A-Za-z ]+$/.test(name)){
+document.getElementById("nameError").innerHTML="Only letters allowed";
+valid=false;
+}
+
+if(roll==""){
+document.getElementById("rollError").innerHTML="Roll Number required";
+valid=false;
+}
+
+if(!/^[0-9]{10}$/.test(phone)){
+document.getElementById("phoneError").innerHTML="Phone must be 10 digits";
+valid=false;
+}
+
+if(address.length<10){
+document.getElementById("addressError").innerHTML="Enter complete address";
+valid=false;
+}
+
+if(!/^[0-9]{6}$/.test(pin)){
+document.getElementById("pinError").innerHTML="PIN must be 6 digits";
+valid=false;
+}
+
+if(hobbies.length==0){
+document.getElementById("hobbyError").innerHTML="Select at least one hobby";
+valid=false;
+}
+
+if(valid){
+
+let output=`
+<h3 style="color:green;text-align:center;">Registration Successful</h3>
+<hr>
+<p><b>Name :</b> ${name}</p>
+<p><b>Roll No :</b> ${roll}</p>
+<p><b>Phone :</b> ${phone}</p>
+<p><b>Address :</b> ${address}</p>
+<p><b>PIN :</b> ${pin}</p>
+<p><b>Hobbies :</b> ${hobbies.join(", ")}</p>
+`;
+
+document.getElementById("result").style.display="block";
+document.getElementById("result").innerHTML=output;
+
+alert("Student Registered Successfully!");
+
+}
+
+});
+
+</script>
+
+</body>
+</html>
