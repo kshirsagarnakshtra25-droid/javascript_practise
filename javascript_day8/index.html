@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Movie Search App</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#1d2671,#c33764);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.container{
+    width:100%;
+    max-width:900px;
+    background:white;
+    border-radius:15px;
+    padding:25px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.3);
+}
+
+h1{
+    text-align:center;
+    color:#1d2671;
+    margin-bottom:20px;
+}
+
+.search-box{
+    display:flex;
+    gap:10px;
+    margin-bottom:25px;
+}
+
+.search-box input{
+    flex:1;
+    padding:12px;
+    border:2px solid #1d2671;
+    border-radius:8px;
+    font-size:16px;
+}
+
+.search-box button{
+    padding:12px 20px;
+    background:#1d2671;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:16px;
+    transition:.3s;
+}
+
+.search-box button:hover{
+    background:#c33764;
+}
+
+.movie-card{
+    display:flex;
+    gap:20px;
+    background:#f8f8f8;
+    border-radius:12px;
+    padding:20px;
+    display:none;
+}
+
+.movie-card img{
+    width:250px;
+    border-radius:10px;
+}
+
+.movie-details{
+    flex:1;
+}
+
+.movie-details h2{
+    color:#c33764;
+    margin-bottom:15px;
+}
+
+.movie-details p{
+    margin:8px 0;
+    color:#333;
+    line-height:1.6;
+}
+
+strong{
+    color:#1d2671;
+}
+
+#error{
+    text-align:center;
+    color:red;
+    font-size:18px;
+    margin-top:15px;
+}
+
+@media(max-width:768px){
+
+.movie-card{
+    flex-direction:column;
+    text-align:center;
+}
+
+.movie-card img{
+    width:100%;
+    max-width:300px;
+    margin:auto;
+}
+
+.search-box{
+    flex-direction:column;
+}
+
+.search-box button{
+    width:100%;
+}
+
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🎬 Movie Search App</h1>
+
+<div class="search-box">
+<input type="text" id="movieInput" placeholder="Enter Movie Name">
+<button onclick="searchMovie()">Search</button>
+</div>
+
+<div id="error"></div>
+
+<div class="movie-card" id="movieCard">
+
+<img id="poster" src="" alt="Poster">
+
+<div class="movie-details">
+
+<h2 id="title"></h2>
+
+<p><strong>Year:</strong> <span id="year"></span></p>
+
+<p><strong>IMDb Rating:</strong> <span id="rating"></span></p>
+
+<p><strong>Genre:</strong> <span id="genre"></span></p>
+
+<p><strong>Director:</strong> <span id="director"></span></p>
+
+<p><strong>Actors:</strong> <span id="actors"></span></p>
+
+<p><strong>Plot:</strong> <span id="plot"></span></p>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+async function searchMovie(){
+
+const title=document.getElementById("movieInput").value;
+
+const apiKey="66c73e66";
+
+const url=`https://www.omdbapi.com/?t=${encodeURIComponent(title)}&apikey=${apiKey}`;
+
+try{
+
+const response=await fetch(url);
+
+const movie=await response.json();
+
+if(movie.Response==="False"){
+
+document.getElementById("movieCard").style.display="none";
+
+document.getElementById("error").innerHTML=movie.Error;
+
+return;
+
+}
+
+document.getElementById("error").innerHTML="";
+
+document.getElementById("movieCard").style.display="flex";
+
+document.getElementById("poster").src=movie.Poster;
+
+document.getElementById("title").innerHTML=movie.Title;
+
+document.getElementById("year").innerHTML=movie.Year;
+
+document.getElementById("rating").innerHTML=movie.imdbRating;
+
+document.getElementById("genre").innerHTML=movie.Genre;
+
+document.getElementById("director").innerHTML=movie.Director;
+
+document.getElementById("actors").innerHTML=movie.Actors;
+
+document.getElementById("plot").innerHTML=movie.Plot;
+
+}
+
+catch(error){
+
+document.getElementById("error").innerHTML="Something went wrong.";
+
+}
+
+}
+
+// Default movie
+document.getElementById("movieInput").value="Jab We Met";
+searchMovie();
+
+</script>
+
+</body>
+</html>
+            
+
+      
+
+
+
+
+
+        
+
+
+        <!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Weather App</title>
+  <style>
+    body { font-family: system-ui; display: flex; justify-content: center; padding: 20px; background: #eceff1; }
+    .card { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px #0002; width: 300px; text-align: center; }
+    input, button { padding: 8px; width: 100%; box-sizing: border-box; margin-bottom: 8px; border: 1px solid #ccc; border-radius: 6px; }
+    button { background: #007bff; color: white; font-weight: bold; cursor: pointer; border: none; }
+    .hidden { display: none; }
+    .err { color: red; font-size: 0.9em; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <input id="key" type="hidden"  value="619f47b4d0ea4ff1ab30419426847c8d" placeholder="OpenWeather API Key">
+    <input id="city" type="text" placeholder="City Name" value="New York">
+    <button onclick="getWeather()">Search</button>
+
+    <div id="err" class="err"></div>
+
+    <div id="ui" class="hidden">
+      <h2 id="name"></h2>
+      <img id="icon" alt="icon">
+      <h1 id="temp"></h1>
+      <p id="desc"></p>
+      <p>Humidity: <b id="humidity"></b> | Wind: <b id="wind"></b></p>
+    </div>
+  </div>
+
+  <script>
+    async function getWeather() {
+      const k = document.getElementById('key').value.trim();
+      const c = document.getElementById('city').value.trim();
+      const err = document.getElementById('err');
+      const ui = document.getElementById('ui');
+
+      err.textContent = '';
+      if (!k || !c) return err.textContent = 'Key & City required!';
+
+      try {
+        const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${c}&appid=${k}&units=metric`);
+        if (!res.ok) throw new Error('City not found or invalid key');
+        const d = await res.json();
+
+        document.getElementById('name').textContent = `${d.name}, ${d.sys.country}`;
+        document.getElementById('temp').textContent = `${Math.round(d.main.temp)}°C`;
+        document.getElementById('desc').textContent = d.weather[0].description;
+        document.getElementById('humidity').textContent = `${d.main.humidity}%`;
+        document.getElementById('wind').textContent = `${d.wind.speed} m/s`;
+        document.getElementById('icon').src = `https://openweathermap.org/img/wn/${d.weather[0].icon}@2x.png`;
+        ui.classList.remove('hidden');
+      } catch (e) {
+        ui.classList.add('hidden');
+        err.textContent = e.message;
+      }
+    }
+  </script>
+</body>
+</html> -->
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html>
+  <head>
+<meta charset="UTF-8">
+<title>document</title>
+  </head>
+  <body>
+    <script>
+      const apiKey = "d9c9eeead83ae94c8c6c2cc9f0ea479a";
+
+const url = `https://api.openweathermap.org/data/2.5/weather?q=kolhapur&appid=${apiKey}&units=metric`;
+
+fetch(url)
+  .then(response => response.json())
+  .then(data => {
+    console.log(data);
+
+    console.log("Temperature:", data.main.temp);
+    console.log("Humidity:", data.main.humidity);
+    console.log("Pressure:", data.main.pressure);
+  })
+  .catch(error => {
+    console.log(error);
+  });
+    </script>
+
+  </body>
+</html> -->
+ -->
